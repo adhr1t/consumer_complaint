@@ -2,16 +2,23 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import LabelEncoder
-from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer, TfidfTransformer
 from sklearn.feature_selection import chi2
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import MultinomialNB
+
 
 
 df = pd.read_csv('complaints_cleaned.csv')
 df = df.sample(n=4673)
 
-# dataframe and dict necessary for tfidf and chi2
+
+# create dataframe with all the Product categories
 category_id_df = df[['Product', 'Category_ID']].drop_duplicates().sort_values('Category_ID')
+
+# dictionary of Product categories
 category_to_id = dict(category_id_df.values)
+id_to_category = dict(category_id_df[['Category_ID', 'Product']].values)
 
 
 ## Text Representation
