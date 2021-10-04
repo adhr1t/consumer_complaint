@@ -1,7 +1,6 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-from sklearn.preprocessing import LabelEncoder
 from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer, TfidfTransformer
 from sklearn.feature_selection import chi2
 from sklearn.model_selection import train_test_split, cross_val_score
@@ -9,7 +8,9 @@ from sklearn.naive_bayes import MultinomialNB
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import LinearSVC
 from sklearn.ensemble import RandomForestClassifier
-
+import seaborn as sns
+from sklearn import metrics
+from sklearn.metrics import classification_report, confusion_matrix
 
 
 df = pd.read_csv('complaints_cleaned.csv')
@@ -63,15 +64,9 @@ X_train_tfidf = tfidfTrans.fit_transform(X_train_counts)
 MNB = MultinomialNB().fit(X_train_tfidf, Y_train)
 
 # some quick tests to see if our model is working
-print(MNB.predict(countVect.transform(["CASHCALL IS ATTEMPTING TO COLLECT ON THE NOTE LOAN THAT DOES NOT BELONG TO ME. IN MY NUMEROUST ATTEMPTS TO REQUEST DEBT\
-                                       VALIDATION OF THIS LOAN FROM 2013, RECEIVED WAS PAYMENT LEDGER THAT SHOWS DATE LOAN ISSUED AND SOME CREDIT BUT NO PROOF OF\
-                                       PAYMENT, NO ID, NO SS # ON THE CONTRACT, AND CONTRACT IS NOT SIGNED, DOESN'T HAVE MY SS # OR DOB OR ADDRESS. 1-CONTRACT IS\
-                                       MISSING SIGNATURE 2- CONTRACT IS MISSING ORIGINATION METHOD AND WHO IS THE PERSON ORIGINATING THIS LOAN 3- CALIFORNIA STATUTORY\
-                                       LIMIT FOR INTEREST RATE IS 10 %. THIS IS A LOAN ORIGINATED IN CA, AT 183.06 % ISN'T THIS USURY?. CASHCALL RECEIVED A RESPONCE\
-                                       FROM ME DISPUTING THIS DEBT AND INSTEAD OF INVESTIGATING THIS MATTER THEY SOLD THIS ERRONEOUS FRAUDULENT COLLECTION TO CCI\
-                                       ACQUISITIONS , LLC WHO IS NOW THREATENING TO SUE ME AND GARNISH MY WAGES ... IST N'T THERE A STATUTORY TIME ALLOWED FOR THEM\
-                                       TO TAKE LEGAL ACTION THAT IS IF THIS ACCOUNT WAS VALID AND ACCURATE? .... THIS IS FRAUD ON INSTITUITIONAL LEVEL!"])))
-                                       # should predict "Debt Collection"
+print(MNB.predict(countVect.transform(["They never informed me I had a right to dispute. I requested verification of debt and never received it. They continue to call me and\
+                                       say they will continue to attempt to recover debt that can not be verified."])))
+                                       # should predict "Debt Collection
                                        
 print(MNB.predict(countVect.transform(["I contacted Equifax Dispute Center, and was connected with XXXX, one of their customer service reps. I explained to him that\
                                        I have tried many times to remove old addresses from my credit report, and have had no luck. He said that as long as creditors\
@@ -88,7 +83,50 @@ print(MNB.predict(countVect.transform(["I contacted Equifax Dispute Center, and 
 
 ## testing other models
 
-models = [RandomForestClassifier(n_estimators=200, max_depth=3, random_state=43), LinearSVC(), MultinomialNB(), LogisticRegression(random_state=42)]
+models = [RandomForestClassifier(n_estimators=200, max_depth=3, random_state=42), LinearSVC(), MultinomialNB(), LogisticRegression(random_state=42)]
 cv = 3
-
+cv_df = pd.DataFrame(index=range(cv * len(models)))
+entries = []
+for model in models:
+  model_name = model.__class__.__name__
+  accuracies = cross_val_score(model, features, labels, scoring='accuracy', cv=cv)
+  for fold_idx, accuracy in enumerate(accuracies):
+    entries.append((model_name, fold_idx, accuracy))
+cv_df = pd.DataFrame(entries, columns=['model_name', 'fold_idx', 'accuracy'])
                                        
+# visualize model performances
+sns.boxplot(x='model_name', y='accuracy', data=cv_df)
+sns.stripplot(x='model_name', y='accuracy', data=cv_df, 
+              size=8, jitter=True, edgecolor="gray", linewidth=2)
+plt.show()
+
+# print model average accuracies; SVC performed the best
+cv_df.groupby('model_name').accuracy.mean()
+
+
+## SVC Model Evaluation
+
+modelSVC = LinearSVC(random_state = 42)
+X_train, X_test, Y_train, Y_test, indices_train, indices_test = train_test_split(features, labels, df.index, test_size=0.2, random_state=42)
+modelSVC.fit(X_train, Y_train)
+Y_pred_SVC = modelSVC.predict(X_test)
+
+# Confusion Matrix
+confMatrix = confusion_matrix(Y_test, Y_pred_SVC)
+fig, ax = plt.subplots(figsize=(10,10))
+sns.heatmap(confMatrix, annot=True, fmt='d', xticklabels=category_id_df.Product.values, yticklabels=category_id_df.Product.values, cmap = 'coolwarm')
+plt.ylabel('Actual')
+plt.xlabel('Predicted')
+plt.show()
+
+# Classification Report; Accuracy included in this and confirmed by cross validation
+print(classification_report(Y_test, Y_pred_SVC))
+
+# Accuracy 
+svc_cv_acc_score = np.mean(cross_val_score(modelSVC, X_train, Y_train, cv=3, scoring= 'accuracy'))    # Accuracy score is .7172
+
+# ROC and AUC
+#svc_cv_AUC_score = np.mean(cross_val_score(modelSVC, X_train, Y_train, cv=3, scoring= 'roc_auc'))      # AUC score is 
+
+
+
