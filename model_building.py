@@ -13,9 +13,9 @@ from sklearn import metrics
 from sklearn.metrics import classification_report, confusion_matrix
 
 
-df = pd.read_csv('complaints_cleaned.csv')
+#df = pd.read_csv('complaints_cleaned.csv')
+df = pd.read_csv('complaints_cleaned_comb.csv')
 df = df.sample(n=4673)
-
 
 # create dataframe with all the Product categories
 category_id_df = df[['Product', 'Category_ID']].drop_duplicates().sort_values('Category_ID')
@@ -27,7 +27,7 @@ id_to_category = dict(category_id_df[['Category_ID', 'Product']].values)
 
 ## Text Representation
 # Term Frequency, Inverse Document Frequency; tf-idf
-# calculated tf-idf vector for each of the Consumer Complaint texts
+# calculates tf-idf vector for each of the Consumer Complaint texts
 # min_df=5 so word must be in 5 documents to be kept, ngram_range=(1,2) so unigrams and bigrams are considered, stop_words=english so pronouns like
 # 'a' and 'the' are removed/not considered 
 tfidfP = TfidfVectorizer(sublinear_tf=True, min_df=5, norm='l2', encoding='latin-1', ngram_range=(1, 2), stop_words='english')
@@ -53,8 +53,6 @@ countVect = CountVectorizer(stop_words='english')
 X_train_counts = countVect.fit_transform(X_train)
 tfidfTrans = TfidfTransformer()
 X_train_tfidf = tfidfTrans.fit_transform(X_train_counts)
-#tfidf = TfidfVectorizer(stop_words='english')
-#X_train_tfidf = tfidf.fit_transform(X_train)
 
 
 
@@ -119,14 +117,43 @@ plt.ylabel('Actual')
 plt.xlabel('Predicted')
 plt.show()
 
+
 # Classification Report; Accuracy included in this and confirmed by cross validation
-print(classification_report(Y_test, Y_pred_SVC))
+prods = pd.Series(df['Product'].sort_values().unique())
+prods = prods.drop([8]) # drop the 'Other financial service' value (index 8) in the series. Doing this bc model doesn't predict
+# anything to be 'Other financial service' so there are no scores to be calculated in the calssification report and it throws an error
+
+try:
+    print(classification_report(Y_test, Y_pred_SVC, target_names=df['Product'].unique()))
+except:
+    print(classification_report(Y_test, Y_pred_SVC, target_names = prods))
+else:
+    print(classification_report(Y_test, Y_pred_SVC))
+
 
 # Accuracy 
-svc_cv_acc_score = np.mean(cross_val_score(modelSVC, X_train, Y_train, cv=3, scoring= 'accuracy'))    # Accuracy score is .7172
-
-# ROC and AUC
-#svc_cv_AUC_score = np.mean(cross_val_score(modelSVC, X_train, Y_train, cv=3, scoring= 'roc_auc'))      # AUC score is 
+svc_cv_acc_score = np.mean(cross_val_score(modelSVC, X_train, Y_train, cv=3, scoring= 'accuracy'))    # Accuracy score is .7761
 
 
 
+# print mispredictions and their correct Product classification
+from IPython.display import display
+for predicted in category_id_df.Category_ID:
+  for actual in category_id_df.Category_ID:
+    if predicted != actual and confMatrix[actual, predicted] >= 10:
+      print("'{}' predicted as '{}' : {} examples.".format(id_to_category[actual], id_to_category[predicted], confMatrix[actual, predicted]))
+      display(df.loc[indices_test[(Y_test == actual) & (Y_pred_SVC == predicted)]][['Product', 'Consumer_complaint_narrative']])
+      print('')
+
+
+# print most common terms for Products determined from SVC
+modelSVC.fit(features, labels)
+N = 2
+for Product, category_id in sorted(category_to_id.items()):
+  indices = np.argsort(modelSVC.coef_[category_id])
+  feature_names = np.array(tfidfP.get_feature_names())[indices]
+  unigrams = [v for v in reversed(feature_names) if len(v.split(' ')) == 1][:N]
+  bigrams = [v for v in reversed(feature_names) if len(v.split(' ')) == 2][:N]
+  print("# '{}':".format(Product))
+  print("  . Top unigrams:\n       . {}".format('\n       . '.join(unigrams)))
+  print("  . Top bigrams:\n       . {}".format('\n       . '.join(bigrams)))
