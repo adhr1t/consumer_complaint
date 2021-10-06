@@ -30,7 +30,7 @@ An example of the most frequent unigrams and bigrams for certain Product classif
 I split the data into train and test sets with a test size of 20%. I then trained a Multinomial Naive Bayes model as a benchmark, and then trained Random Forest Classifier, Linear SVM, and Logistic Regression classifier models.
 
 I evaluated the models based on their prediction Accuracy.   
-*   **Multinomial Naive Bayes:** .5834
-*   **Random Forest Classifier:** .4190
-*   **Linear SVM:** .7761
-*   **Logistic Regression:** .7411
+*   **Multinomial Naive Bayes:** Accuracy = .5834
+*   **Random Forest Classifier:** Accuracy = .4190
+*   **Linear SVM:** Accuracy = .7761
+*   **Logistic Regression:** Accuracy = .7411
