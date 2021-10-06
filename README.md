@@ -12,4 +12,6 @@
 **Data Source:**  https://catalog.data.gov/dataset/consumer-complaint-database
 
 # Cleaning
-
+*   Reduced the dataset to only Consumer Complaint Narratives and Product columns
+*   dropped all rows in which Consumer Complaint Narratives were left blank or unavailable
+*   Coalesced similar Product classifications such as "Credit card" &rarr; "Credit card or prepaid card"
