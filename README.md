@@ -5,3 +5,9 @@
 *   Employed TfidfVectorizer and the chi-squared test to determine the most common unigrams and bigrams for each complaint classification
 *   Trained Multinomial Naive Bayes, Random Forest Classifier, Linear SVM, and Logistic Regression classifier models
 *   Determined Linear SVM was the most efficacious model and evaluated it via Confusion Matrix, Classification Report, and Cross Validation Accuracy score
+
+# Code and Resources Used
+**Python Version:** 3.9\
+**Packages:**   pandas, numpy, matplotlib, sklearn, and seaborn
+**Resources:**  https://catalog.data.gov/dataset/consumer-complaint-database
+
