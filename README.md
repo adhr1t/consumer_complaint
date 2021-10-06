@@ -9,5 +9,7 @@
 # Code and Resources Used
 **Python Version:** 3.9\
 **Packages:**   pandas, numpy, matplotlib, sklearn, and seaborn\
-**Resources:**  https://catalog.data.gov/dataset/consumer-complaint-database
+**Data Source:**  https://catalog.data.gov/dataset/consumer-complaint-database
+
+# Cleaning
 
