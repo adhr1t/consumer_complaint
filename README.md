@@ -27,7 +27,7 @@ An example of the most frequent unigrams and bigrams for certain Product classif
 ![unigrams](https://user-images.githubusercontent.com/72672768/136121009-addcc510-fe77-420d-99e7-d46a03425c24.png)
 
 # Model Building
-I split the data into train and test sets with a test size of 20%. I then trained a Multinomial Naive Bayes model as a benchmark, and then trained Random Forest Classifier, Linear SVM, and Logistic Regression classifier models.\
+I split the data into train and test sets with a test size of 20%. I then trained a Multinomial Naive Bayes model as a benchmark, and then trained Random Forest Classifier, Linear SVM, and Logistic Regression classifier models.
 
 I evaluated the models based on their prediction Accuracy.   
 *   **Multinomial Naive Bayes:** ..5834
