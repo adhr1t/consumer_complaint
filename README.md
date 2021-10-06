@@ -14,4 +14,4 @@
 # Cleaning
 *   Reduced the dataset to only Consumer Complaint Narratives and Product columns
 *   dropped all rows in which Consumer Complaint Narratives were left blank or unavailable
-*   Coalesced similar Product classifications such as "Credit card" &rarr; "Credit card or prepaid card"
+*   Coalesced similar Product classifications such as "Payday loan" &rarr; "Payday loan, title loan, or personal loan" by reassigning Product values as the new, overarching Product classification
