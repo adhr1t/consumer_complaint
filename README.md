@@ -16,3 +16,7 @@
 *   dropped all rows in which Consumer Complaint Narratives were left blank or unavailable
 *   Coalesced similar Product classifications such as "Payday loan" &rarr; "Payday loan, title loan, or personal loan" by reassigning Product classifications as the holistic, overarching Product classification
 *   Label Encoded Product values
+
+# EDA
+Built a histogram to visualize data spread and class imbalance. Also outputted the most common unigrams and bigrams per Product classification.
+![histogram](https://user-images.githubusercontent.com/72672768/136120792-0b315453-3107-4c02-bd29-08eb9b57bbb9.png)
