@@ -32,5 +32,18 @@ I split the data into train and test sets with a test size of 20%. I then traine
 I evaluated the models based on their prediction Accuracy.   
 *   **Multinomial Naive Bayes:** Accuracy = .5834
 *   **Random Forest Classifier:** Accuracy = .4190
-*   **Linear SVM:** Accuracy = .7761
+*   **Linear SVC:** Accuracy = .7761
 *   **Logistic Regression:** Accuracy = .7411
+
+![models](https://user-images.githubusercontent.com/72672768/136146062-aa268986-8960-45d3-b020-bdd6573d6a20.png)
+
+# Model Performance
+The Linear SVC model performed the best on test and validation sets.
+
+Linear SVC Confusion Matrix:
+
+![confMatrix](https://user-images.githubusercontent.com/72672768/136146324-16f733e6-3d74-436b-a186-c50c563d8dd4.png)
+
+Linear SVC Classification Report:
+
+![fscore](https://user-images.githubusercontent.com/72672768/136146391-ef2a85ef-925a-4203-90e9-3dcd439c044b.png)
