@@ -38,7 +38,7 @@ I evaluated the models based on their prediction Accuracy.
 ![models](https://user-images.githubusercontent.com/72672768/136146062-aa268986-8960-45d3-b020-bdd6573d6a20.png)
 
 # Model Performance
-The Linear SVC model performed the best on test and validation sets. There's still heavy class imbalance, which naturally affected the model's efficacy for predicting minority classes. However, a few majority classes make up an overwhelming majority of the Product classifications, and we want to maintain high accuracy in predicting those.
+The Linear SVC model performed the best on test and validation sets. There's still heavy class imbalance, which naturally affected the model's accuracy in predicting minority classes. However, a few majority classes make up an overwhelming majority of the Product classifications, and we want to maintain high accuracy in predicting those.
 
 Linear SVC Confusion Matrix:
 
