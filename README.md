@@ -22,4 +22,6 @@ Built a histogram to visualize data spread and class imbalance. Also outputted t
 
 ![histogram](https://user-images.githubusercontent.com/72672768/136120792-0b315453-3107-4c02-bd29-08eb9b57bbb9.png)
 
+An example of the most frequent unigrams and bigrams for certain Product classifications:
+
 ![unigrams](https://user-images.githubusercontent.com/72672768/136121009-addcc510-fe77-420d-99e7-d46a03425c24.png)
