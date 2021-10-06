@@ -13,7 +13,7 @@
 
 # Cleaning
 *   Reduced the dataset to only Consumer Complaint Narratives and Product columns
-*   dropped all rows in which Consumer Complaint Narratives were left blank or unavailable
+*   Dropped all rows in which Consumer Complaint Narratives were left blank or unavailable
 *   Coalesced similar Product classifications such as "Payday loan" &rarr; "Payday loan, title loan, or personal loan" by reassigning Product classifications as the holistic, overarching Product classification
 *   Label Encoded Product values
 
