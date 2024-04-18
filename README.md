@@ -47,3 +47,6 @@ Linear SVC Confusion Matrix:
 Linear SVC Classification Report:
 
 ![fscore](https://user-images.githubusercontent.com/72672768/136146391-ef2a85ef-925a-4203-90e9-3dcd439c044b.png)
+
+- Intepretation of Precision for Bank account or service: TP/(TP+FP). TP = 2 because model predicts Bank account or service 2 times and is correct 2 times (top left corner). FP = 6 because the model predicts Bank account or service 6 times (up the left-most column). Thus 2/(2 + 6) = .25
+- Interpretaton of Recall for Bank account or service: TP/(TP + FN). TP = 2 because model predicts Bank account or service 2 times and is correct 2 times (top left corner). FN = 20 because the model predicts everything EXCEPT Bank account or service 20 times (top row). Thus 2/(2 + 20) = .09
